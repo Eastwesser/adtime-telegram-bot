@@ -8,20 +8,25 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// Настройки приложения
-
+// Config Настройки приложения
 type Config struct {
 	TelegramAPIKey string
 	DatabaseURL    string
-	DBUser         string
-	DBPassword     string
-	DBName         string
-	DBHost         string
-	DBPort         string
+	BotToken       string `env:"BOT_TOKEN,required"`
+	ChannelID      int64  `env:"CHANNEL_ID,required"`
+	DBUser         string `env:"DB_USER" envDefault:"postgres"`
+	DBPassword     string `env:"DB_PASSWORD" envDefault:"postgres"`
+	DBName         string `env:"DB_NAME" envDefault:"adtime-telegram-bot"`
+	DBHost         string `env:"DB_HOST" envDefault:"localhost"`
+	DBPort         string `env:"DB_PORT" envDefault:"5432"`
+	RedisAddr      string `env:"REDIS_ADDR" envDefault:"localhost:6379"`
+	RedisPassword  string `env:"REDIS_PASSWORD" envDefault:""`
+	RedisDB        int    `env:"REDIS_DB" envDefault:"0"`
 }
 
+// LoadConfig Загрузка из .env
 func LoadConfig() *Config {
-	// Загрузка из .env
+
 	err := godotenv.Load("../../.env")
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
