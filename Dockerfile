@@ -5,9 +5,11 @@ FROM golang:1.23 AS builder
 WORKDIR /app
 
 # Копируем go.mod и go.sum
+COPY . .
 COPY go.mod go.sum ./
 
 # Загружаем зависимости
+RUN apk add --no-cache git
 RUN go mod download
 
 # Копируем весь проект
@@ -24,7 +26,7 @@ WORKDIR /app
 
 # Копируем скомпилированный файл
 COPY --from=builder /app/pompon-bot /app/
-
+COPY --from=builder /app/migrations /app/migrations
 # Открываем порт для бота (опционально)
 EXPOSE 8080
 
